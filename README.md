@@ -280,3 +280,9 @@ This method is provided on modules in addition to `:OnModuleUnload()` in order t
 of a module until later in the unloading process. This allows for a 2-stage unloading process if
 other modules need to be unloaded first. Note that a single module **cannot use both**
 `:OnModuleUnload()` and `:OnModuleUnloadLate()`.
+
+## License and Contributes
+
+LibTSMCore is licensed under the MIT license. See LICENSE.txt for more information. If you would
+like to contribute to LibTSMCore, opening an issue or submitting a pull request against the
+[LibTSMCore GitHub project](https://github.com/TradeSkillMaster/LibTSMCore) is highly encouraged.
