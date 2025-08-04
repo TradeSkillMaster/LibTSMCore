@@ -99,9 +99,10 @@ opt.ignore = {
 -- Only output files with warnings / errors
 opt.quiet = 1
 
--- Exclude Tests/ folder
+-- Exclude tests and plugins
 opt.exclude_files = {
 	"Tests/",
+	"LuaLSPlugin/",
 }
 
 return opt
