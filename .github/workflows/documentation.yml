@@ -28,7 +28,7 @@ jobs:
       - name: Sphinx Build
         run: |
           sphinx-build -vvv Docs Docs/_build
-          ls -l /tmp/python_lua_ls_cache
+          ls -l /tmp/python_lua_ls_cache/log
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
