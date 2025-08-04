@@ -103,6 +103,7 @@ opt.quiet = 1
 opt.exclude_files = {
 	"Tests/",
 	"LuaLSPlugin/",
+	".vscode/"
 }
 
 return opt
