@@ -35,6 +35,7 @@ function Plugin.GetContext(uri, text)
 		text = text,
 		lines = {},
 		lineStartPos = {},
+		componentNames = {},
 		diffs = nil,
 		currentLine = {
 			index = nil,
@@ -43,14 +44,13 @@ function Plugin.GetContext(uri, text)
 		AddPrefixDiff = ContextAddPrefixDiff,
 		LineIterator = function(self) return ContextLineIterator, self, 0 end,
 	}
-	for startPos, str in text:gmatch("()(.-)\r?\n") do
-		table.insert(context.lines, str)
+	for startPos, line in text:gmatch("()(.-)\r?\n") do
+		table.insert(context.lines, line)
 		table.insert(context.lineStartPos, startPos)
-		if not context.componentName then
-			local varName, tblKey = str:match("^local ([A-Za-z0-9_]+) = select%(2, %.%.%.%)%.(.-)$")
+		if line:sub(1, 5) == "local" and line:find("select(2, ...)", nil, true) then
+			local varName, tblKey = line:match("^local ([A-Za-z0-9_]+) = select%(2, %.%.%.%)%.(.-)$")
 			if varName and varName == tblKey then
-				context.componentName = varName
-				context.componentDefLineStartPos = startPos
+				table.insert(context.componentNames, varName)
 			end
 		end
 	end
@@ -144,27 +144,24 @@ end
 
 local function ProcessModuleType(context, expression)
 	-- Define class for <COMPONENT>:Init("<MODULE_NAME>") calls
-	if not context.componentName then
-		return
+	for _, componentName in ipairs(context.componentNames) do
+		local className = expression:match(componentName..":Init%(\"([^\"]+)\"%)")
+		if className then
+			context:AddPrefixDiff("---@class "..className..": LibTSMModule\n")
+			break
+		end
 	end
-	local className = expression:match(context.componentName..":Init%(\"([^\"]+)\"%)")
-	if not className then
-		return
-	end
-	context:AddPrefixDiff("---@class "..className..": LibTSMModule\n")
 end
 
 local function ProcessClassType(context, expression)
 	-- Define class for <COMPONENT>:DefineClassType("<CLASS_NAME>", ...) calls
-	if not context.componentName then
-		return
+	for _, componentName in ipairs(context.componentNames) do
+		local className, extraArgs = expression:match(componentName..":DefineClassType%(\"([^\"]+)\"(.-)%)")
+		if className then
+			local parentClassName = extraArgs:match("^, (%a+)$") or extraArgs:match("^, (%a+), \"ABSTRACT\"$")
+			context:AddPrefixDiff(LibTSMClassPlugin.DefineClassHelper(className, parentClassName, context.text, context.lines))
+		end
 	end
-	local className, extraArgs = expression:match(context.componentName..":DefineClassType%(\"([^\"]+)\"(.-)%)")
-	if not className then
-		return
-	end
-	local parentClassName = extraArgs:match("^, (%a+)$") or extraArgs:match("^, (%a+), \"ABSTRACT\"$")
-	context:AddPrefixDiff(LibTSMClassPlugin.DefineClassHelper(className, parentClassName, context.text, context.lines))
 end
 
 local function ProcessVariableAssignment(context, line, stateClassTypeHelperFunc)
