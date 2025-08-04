@@ -20,6 +20,7 @@ extensions = [
 
 # Path to the folder containing the `.luarc.json` file,
 # relative to the directory with `conf.py`.
+lua_ls_backend = "luals"
 lua_ls_project_root = "../"
 source_suffix = ['.rst', '.md']
 templates_path = ['_templates']
