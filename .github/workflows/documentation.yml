@@ -18,6 +18,12 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Checkout LibTSMClass
+        uses: actions/checkout@v4
+        with:
+          repository: TradeSkillMaster/LibTSMClass
+          path: .
+
       - name: Python Setup
         uses: actions/setup-python@v5
 
@@ -27,7 +33,7 @@ jobs:
 
       - name: Sphinx Build
         run: |
-          sphinx-build Docs _build
+          sphinx-build Docs Docs/_build
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
@@ -35,5 +41,5 @@ jobs:
         with:
           publish_branch: gh-pages
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: _build/
+          publish_dir: Docs/_build/
           force_orphan: true
