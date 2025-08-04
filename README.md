@@ -281,6 +281,14 @@ of a module until later in the unloading process. This allows for a 2-stage unlo
 other modules need to be unloaded first. Note that a single module **cannot use both**
 `:OnModuleUnload()` and `:OnModuleUnloadLate()`.
 
+## LuaLS Plugin
+
+A [plugin](LuaLSPlugin/LibTSMCoreLuaLSPlugin.lua) for
+[LuaLS](https://github.com/LuaLS/lua-language-server) is provided to allow for better language
+server support. The plugin exposes `.GetContext(uri, text)` and `.ProcessContext(context)`
+functions which can be called on the `OnSetText(uri, text)` function in your own plugin as well as
+a few other useful functions for more custom integrations.
+
 ## License and Contributes
 
 LibTSMCore is licensed under the MIT license. See LICENSE.txt for more information. If you would
