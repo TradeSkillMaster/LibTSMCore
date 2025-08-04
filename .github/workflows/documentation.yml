@@ -1,4 +1,4 @@
-name: documentation
+name: Documentation
 
 on:
   pull_request:
@@ -11,16 +11,24 @@ permissions:
 
 jobs:
   docs:
+    name: Build Documentation
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-      - name: Install dependencies
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Python Setup
+        uses: actions/setup-python@v5
+
+      - name: Install Dependencies
         run: |
           pip install sphinx sphinx-lua-ls sphinx-rtd-theme myst-parser
-      - name: Sphinx build
+
+      - name: Sphinx Build
         run: |
           sphinx-build Docs _build
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
