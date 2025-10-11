@@ -87,6 +87,7 @@ local MODULE_MT = {
 -- LibTSMComponent Class - Meta Methods
 -- ============================================================================
 
+---@class LibTSMComponent
 local LibTSMComponent = LibTSMClass.DefineClass("LibTSMComponent")
 
 ---@class LibTSMModuleContext

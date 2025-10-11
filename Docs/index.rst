@@ -9,7 +9,7 @@ Example
 -------
 
 To use LibTSMCore, add LibTSMCore.xml to your .toc (or equivalent XML) and the `LibTSMCore`
-namespace will be added to your local addon table. General convention is to define the compoent
+namespace will be added to your local addon table. General convention is to define a compoent
 within a discrete top-level file which is loaded first::
 
    -- Utils/Core.lua
