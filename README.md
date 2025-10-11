@@ -33,7 +33,7 @@ Otherwise, you can download the
 ## Basic Usage
 
 To use LibTSMCore, add LibTSMCore.xml to your .toc (or equivalent XML) and the `LibTSMCore`
-namespace will be added to your local addon table. General convention is to define the compoent
+namespace will be added to your local addon table. General convention is to define a compoent
 within a discrete top-level file which is loaded first:
 
 ```lua
@@ -87,7 +87,7 @@ end
 A [plugin](LuaLSPlugin/LibTSMCoreLuaLSPlugin.lua) for
 [LuaLS](https://github.com/LuaLS/lua-language-server) is provided to allow for better language
 server support. The plugin exposes `.GetContext(uri, text)` and `.ProcessContext(context)`
-functions which can be called on the `OnSetText(uri, text)` function in your own plugin as well as
+functions which can be called in the `OnSetText(uri, text)` function in your own plugin as well as
 a few other useful functions for more custom integrations.
 
 ## License and Contributes
