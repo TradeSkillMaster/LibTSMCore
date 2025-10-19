@@ -1,7 +1,7 @@
 -- ------------------------------------------------------------------------------ --
---                                TradeSkillMaster                                --
---                          https://tradeskillmaster.com                          --
---    All Rights Reserved - Detailed license information included with addon.     --
+--                                   LibTSMCore                                   --
+--                 https://github.com/TradeSkillMaster/LibTSMCore                 --
+--         Licensed under the MIT license. See LICENSE.txt for more info.         --
 -- ------------------------------------------------------------------------------ --
 
 local ADDON_NAME = ...
