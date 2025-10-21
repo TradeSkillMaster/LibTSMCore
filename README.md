@@ -90,7 +90,7 @@ server support. The plugin exposes `.GetContext(uri, text)` and `.ProcessContext
 functions which can be called in the `OnSetText(uri, text)` function in your own plugin as well as
 a few other useful functions for more custom integrations.
 
-## License and Contributes
+## License and Contributions
 
 LibTSMCore is licensed under the MIT license. See LICENSE.txt for more information. If you would
 like to contribute to LibTSMCore, opening an issue or submitting a pull request against the
