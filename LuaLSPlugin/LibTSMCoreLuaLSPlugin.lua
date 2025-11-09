@@ -143,9 +143,9 @@ local function ProcessComponentType(context, varName, expression)
 end
 
 local function ProcessModuleType(context, expression)
-	-- Define class for <COMPONENT>:Init("<MODULE_NAME>") calls
+	-- Define class for <COMPONENT>:Init*("<MODULE_NAME>") calls
 	for _, componentName in ipairs(context.componentNames) do
-		local className = expression:match(componentName..":Init%(\"([^\"]+)\"%)")
+		local className = expression:match(componentName..":InitI?n?t?e?r?n?a?l?%(\"([^\"]+)\"%)")
 		if className then
 			context:AddPrefixDiff("---@class "..className..": LibTSMModule\n")
 			break

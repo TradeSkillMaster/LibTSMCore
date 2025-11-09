@@ -115,6 +115,13 @@ function private.SlashCommandHandler()
 end
 ```
 
+## Internal Modules / Classes
+
+Modules and classes within a component can be defined as internal via the `:InitInternal()` and
+`:DefineInternalClassType()` APis respectively. This ensures they cannot be included outside of the
+current component, and is useful to prevent leaking internal implementation APIs to other
+components.
+
 ## Component APIs
 
 Components provide a set of APIs which may be called within the modules to provide some baseline

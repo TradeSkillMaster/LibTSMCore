@@ -12,6 +12,8 @@ local LibTSMClass = LibStub("LibTSMClass")
 local private = {
 	components = {}, ---@type LibTSMComponent[]
 	componentByModule = {}, ---@type table<LibTSMModule,LibTSMComponent>
+	componentByReference = {}, ---@type table<LibTSMComponentReference,LibTSMComponent>
+	isExternalAccess = false,
 	timeFunc = nil,
 	versionStr = nil,
 	versionIsDev = nil,
@@ -84,6 +86,48 @@ local MODULE_MT = {
 
 
 -- ============================================================================
+-- LibTSMComponentReference Metatable
+-- ============================================================================
+
+---@class LibTSMComponentReference
+local COMPOENT_REFERENCE_METHODS = {}
+
+---Includes a module from the component.
+---@generic T
+---@param path `T` The path of the module
+---@return T
+function COMPOENT_REFERENCE_METHODS:Include(path)
+	assert(not private.isExternalAccess)
+	private.isExternalAccess = true
+	local module = private.componentByReference[self]:Include(path)
+	assert(private.isExternalAccess)
+	private.isExternalAccess = false
+	return module
+end
+
+---Includes a class type from the component.
+---@generic T
+---@param name `T` The name of the class
+---@return T
+function COMPOENT_REFERENCE_METHODS:IncludeClassType(name)
+	assert(not private.isExternalAccess)
+	private.isExternalAccess = true
+	local class =  private.componentByReference[self]:IncludeClassType(name)
+	assert(private.isExternalAccess)
+	private.isExternalAccess = false
+	return class
+end
+
+local COMPONENT_REFERENCE_MT = {
+	__index = COMPOENT_REFERENCE_METHODS,
+	__newindex = function() error("Cannot write to LibTSMComponentReference", 2) end,
+	__tostring = function(self) return tostring(private.componentByReference[self]) end,
+	__metatable = false,
+}
+
+
+
+-- ============================================================================
 -- LibTSMComponent Class - Meta Methods
 -- ============================================================================
 
@@ -93,6 +137,7 @@ local LibTSMComponent = LibTSMClass.DefineClass("LibTSMComponent")
 ---@class LibTSMModuleContext
 ---@field path string
 ---@field module LibTSMModule
+---@field isInternal boolean
 ---@field moduleLoadFunc fun()?
 ---@field moduleLoadTime number?
 ---@field moduleUnloadFunc fun()?
@@ -104,10 +149,13 @@ function LibTSMComponent:__init(name)
 	self._name = name
 	self._moduleContext = {} ---@type table<LibTSMModule|string,LibTSMModuleContext>
 	self._classTypes = {} ---@type table<string,Class>
+	self._classIsInternal = {} ---@type table<string,boolean>
 	self._initOrder = {} ---@type LibTSMModuleContext[]
 	self._loadOrder = {} ---@type LibTSMModuleContext[]
 	self._lateUnload = {} ---@type LibTSMModuleContext[]
 	self._dependencies = {} ---@type table<string,LibTSMComponent>
+	self._reference = setmetatable({}, COMPONENT_REFERENCE_MT) ---@type LibTSMComponentReference
+	private.componentByReference[self._reference] = self
 end
 
 
@@ -165,20 +213,109 @@ end
 -- LibTSMComponent Class - Public Methods
 -- ============================================================================
 
----Creates a new module.
+---Creates a new module and makes it available to other components.
 ---@generic T: LibTSMModule
 ---@param path `T` The path of the module
 ---@return T
 function LibTSMComponent:Init(path)
+	return self:_InitHelper(path, false)
+end
+
+---Creates a new module which is only available internally within the component.
+---@generic T: LibTSMModule
+---@param path `T` The path of the module
+---@return T
+function LibTSMComponent:InitInternal(path)
+	return self:_InitHelper(path, true)
+end
+
+---Creates a new class type and makes it available to other components.
+---@generic T: Class
+---@param name `T` The name of the class
+---@param parentClass? Class The parent class
+---@param ... ClassProperties Properties to define the class with
+---@return T
+function LibTSMComponent:DefineClassType(name, parentClass, ...)
+	return self:_DefineClassTypeHelper(false, name, parentClass, ...)
+end
+
+---Creates a new class type which is only available internally within the component.
+---@generic T: Class
+---@param name `T` The name of the class
+---@param parentClass? Class The parent class
+---@param ... ClassProperties Properties to define the class with
+---@return T
+function LibTSMComponent:DefineInternalClassType(name, parentClass, ...)
+	return self:_DefineClassTypeHelper(true, name, parentClass, ...)
+end
+
+---Returns an existing module.
+---@generic T
+---@param path `T` The path of the module
+---@return T
+function LibTSMComponent:Include(path)
+	local context = self._moduleContext[path]
+	if not context then
+		error("Module doesn't exist for path: "..tostring(path), private.isExternalAccess and 5 or 3)
+	elseif context.isInternal and private.isExternalAccess then
+		error("Cannot include internal module: "..tostring(path), 5)
+	end
+	self:_ProcessModuleLoad(context)
+	return context.module
+end
+
+---Returns a class type.
+---@generic T
+---@param name `T` The name of the class
+---@return T
+function LibTSMComponent:IncludeClassType(name)
+	local class = self._classTypes[name]
+	if not class then
+		error("Class type doesn't exist: "..tostring(name), private.isExternalAccess and 5 or 3)
+	elseif self._classIsInternal[name] and private.isExternalAccess then
+		error("Cannot include internal class: "..tostring(name), 5)
+	end
+	return class
+end
+
+---Retrieves a component which the current component depends on.
+---@param name string The name of the component
+---@return LibTSMComponentReference
+function LibTSMComponent:From(name)
+	local component = self._dependencies[name]
+	assert(component)
+	return component._reference
+end
+
+---Adds a component as a dependency of the current component.
+---@param name string The name of the component
+---@return LibTSMComponent
+function LibTSMComponent:AddDependency(name)
+	assert(not next(self._moduleContext) and not next(self._classTypes))
+	assert(type(name) == "string" and not self._dependencies[name])
+	local component = private.components[name]
+	assert(component)
+	self._dependencies[name] = component
+	return self
+end
+
+
+
+-- ============================================================================
+-- LibTSMComponent Class - Private Methods
+-- ============================================================================
+
+function LibTSMComponent.__private:_InitHelper(path, isInternal)
 	assert(type(path) == "string")
 	if self._moduleContext[path] then
-		error("Module already exists for path: "..tostring(path), 3)
+		error("Module already exists for path: "..tostring(path), 5)
 	end
 	local moduleObj = setmetatable({}, MODULE_MT)
 	private.componentByModule[moduleObj] = self
-	local context = {
+	local context = { ---@type LibTSMModuleContext
 		path = path,
 		module = moduleObj,
+		isInternal = isInternal,
 		moduleLoadFunc = nil,
 		moduleLoadTime = nil,
 		moduleUnloadFunc = nil,
@@ -199,67 +336,16 @@ end
 ---@param parentClass? Class The parent class
 ---@param ... ClassProperties Properties to define the class with
 ---@return T
-function LibTSMComponent:DefineClassType(name, parentClass, ...)
+function LibTSMComponent:_DefineClassTypeHelper(isInternal, name, parentClass, ...)
 	assert(type(name) == "string")
 	if self._classTypes[name] then
-		error("Class type already exists: "..tostring(name), 3)
+		error("Class type already exists: "..tostring(name), 5)
 	end
 	local class = LibTSMClass.DefineClass(name, parentClass, ...)
 	self._classTypes[name] = class
+	self._classIsInternal[name] = isInternal
 	return class
 end
-
----Returns an existing module.
----@generic T
----@param path `T` The path of the module
----@return T
-function LibTSMComponent:Include(path)
-	local context = self._moduleContext[path]
-	if not context then
-		error("Module doesn't exist for path: "..tostring(path), 3)
-	end
-	self:_ProcessModuleLoad(context)
-	return context.module
-end
-
----Returns a class type.
----@generic T
----@param name `T` THe name of the class
----@return T
-function LibTSMComponent:IncludeClassType(name)
-	local class = self._classTypes[name]
-	if not class then
-		error("Class type doesn't exist: "..tostring(name), 3)
-	end
-	return class
-end
-
----Retrieves a component which the current component depends on.
----@generic T: LibTSMComponent
----@param name `T` The name of the component
----@return T
-function LibTSMComponent:From(name)
-	local component = self._dependencies[name]
-	assert(component)
-	return component
-end
-
----Adds a component as a dependency of the current component.
----@param name string The name of the component
----@return LibTSMComponent
-function LibTSMComponent:AddDependency(name)
-	assert(type(name) == "string" and not self._dependencies[name])
-	local component = private.components[name]
-	assert(component)
-	self._dependencies[name] = component
-	return self
-end
-
-
-
--- ============================================================================
--- LibTSMComponent Class - Private Methods
--- ============================================================================
 
 ---@private
 function LibTSMComponent:_SetModuleLoadFunc(module, func)
