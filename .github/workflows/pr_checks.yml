@@ -36,4 +36,4 @@ jobs:
         run: luacheck .
 
       - name: Unit Tests
-        run: lua LibTSMCore/Tests/Core.lua
+        run: lua Tests/Core.lua
