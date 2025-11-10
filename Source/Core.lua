@@ -336,7 +336,7 @@ end
 ---@param parentClass? Class The parent class
 ---@param ... ClassProperties Properties to define the class with
 ---@return T
-function LibTSMComponent:_DefineClassTypeHelper(isInternal, name, parentClass, ...)
+function LibTSMComponent.__private:_DefineClassTypeHelper(isInternal, name, parentClass, ...)
 	assert(type(name) == "string")
 	if self._classTypes[name] then
 		error("Class type already exists: "..tostring(name), 5)

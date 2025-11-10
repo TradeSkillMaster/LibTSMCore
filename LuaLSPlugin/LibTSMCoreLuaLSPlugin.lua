@@ -154,9 +154,9 @@ local function ProcessModuleType(context, expression)
 end
 
 local function ProcessClassType(context, expression)
-	-- Define class for <COMPONENT>:DefineClassType("<CLASS_NAME>", ...) calls
+	-- Define class for <COMPONENT>:Define*ClassType("<CLASS_NAME>", ...) calls
 	for _, componentName in ipairs(context.componentNames) do
-		local className, extraArgs = expression:match(componentName..":DefineClassType%(\"([^\"]+)\"(.-)%)")
+		local className, extraArgs = expression:match(componentName..":DefineI?n?t?e?r?n?a?l?ClassType%(\"([^\"]+)\"(.-)%)")
 		if className then
 			local parentClassName = extraArgs:match("^, (%a+)$") or extraArgs:match("^, (%a+), \"ABSTRACT\"$")
 			context:AddPrefixDiff(LibTSMClassPlugin.DefineClassHelper(className, parentClassName, context.text, context.lines))
