@@ -5,10 +5,6 @@ jobs:
     name: Pull Request Checks
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: ./repo
-
     env:
       LUA_DEPS_PATH: ${{ github.workspace }}/.luadeps
 
@@ -34,6 +30,7 @@ jobs:
 
       - name: Run Luacheck
         run: luacheck .
+        working-directory: repo/
 
       - name: Unit Tests
-        run: lua Tests/Core.lua
+        run: lua LibTSMCore/Tests/Core.lua
