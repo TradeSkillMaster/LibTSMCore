@@ -12,7 +12,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          path: repo
+          path: LibTSMCore/
 
       - name: Install Lua 5.1.5
         uses: leafo/gh-actions-lua@v10
@@ -30,7 +30,7 @@ jobs:
 
       - name: Run Luacheck
         run: luacheck .
-        working-directory: repo/
+        working-directory: LibTSMCore/
 
       - name: Unit Tests
         run: lua LibTSMCore/Tests/Core.lua
