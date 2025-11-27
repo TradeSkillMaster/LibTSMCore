@@ -55,6 +55,23 @@ function DebugPrint.PrintIsValidLevel(level)
 end
 ```
 
+### Class Type Extensions
+
+Class types can also be extended via LibTSMCore.
+
+```lua
+-- Utils/DebugPrint.lua
+local RangeExtension = Utils:ExtendClass("Range")
+
+function RangeExtension:PrintIsIncluded(value)
+    if self:IncludesValues(value) then
+        print(format("%d is included in range!", value))
+    else
+        print(format("%d is not included in range!", value))
+    end
+end
+```
+
 ## Loading / Unloading
 
 Each module provides a set of default methods which can be used to run code when the module is

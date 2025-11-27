@@ -154,12 +154,22 @@ local function ProcessModuleType(context, expression)
 end
 
 local function ProcessClassType(context, expression)
-	-- Define class for <COMPONENT>:Define*ClassType("<CLASS_NAME>", ...) calls
 	for _, componentName in ipairs(context.componentNames) do
+		-- Define class for <COMPONENT>:Define*ClassType("<CLASS_NAME>", ...) calls
 		local className, extraArgs = expression:match(componentName..":DefineI?n?t?e?r?n?a?l?ClassType%(\"([^\"]+)\"(.-)%)")
 		if className then
 			local parentClassName = extraArgs:match("^, (%a+)$") or extraArgs:match("^, (%a+), \"ABSTRACT\"$")
 			context:AddPrefixDiff(LibTSMClassPlugin.DefineClassHelper(className, parentClassName, context.text, context.lines))
+		end
+		-- Define class for <COMPONENT>:ExtendClass("<CLASS_NAME>") calls
+		local extendClassName = expression:match(componentName..":ExtendClass%(\"([^\"]+)\"%)")
+		if extendClassName then
+			context:AddPrefixDiff("---@class "..extendClassName.."\n")
+		end
+		-- Define class for <COMPONENT>:From("<OTHER_COMPONENT>"):ExtendClass("<CLASS_NAME>") calls
+		local extendClassName2 = expression:match(componentName..":From%(\"[^\"]+\"%):ExtendClass%(\"([^\"]+)\"%)")
+		if extendClassName2 then
+			context:AddPrefixDiff("---@class "..extendClassName2.."\n")
 		end
 	end
 end

@@ -118,6 +118,16 @@ function COMPOENT_REFERENCE_METHODS:IncludeClassType(name)
 	return class
 end
 
+---Extends a previously-registered class (including an internal one).
+---@generic T
+---@param name `T` The name of the class
+---@return T
+function COMPOENT_REFERENCE_METHODS:ExtendClass(name)
+	assert(not private.isExternalAccess)
+	local class =  private.componentByReference[self]:IncludeClassType(name)
+	return class:__extend()
+end
+
 local COMPONENT_REFERENCE_MT = {
 	__index = COMPOENT_REFERENCE_METHODS,
 	__newindex = function() error("Cannot write to LibTSMComponentReference", 2) end,
