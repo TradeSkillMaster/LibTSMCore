@@ -117,6 +117,9 @@ local function ProcessClassType(context, expression)
 		local className, extraArgs = expression:match(componentName..":DefineI?n?t?e?r?n?a?l?ClassType%(\"([^\"]+)\"(.-)%)")
 		if className then
 			local parentClassName = extraArgs:match("^, (%a+)$") or extraArgs:match("^, (%a+), \"ABSTRACT\"$")
+			if parentClassName == "nil" then
+				parentClassName = nil
+			end
 			context:AddPrefixDiff(LibTSMClassPlugin.DefineClassHelper(className, parentClassName, context.text, context.lines))
 		end
 		-- Define class for <COMPONENT>:ExtendClass("<CLASS_NAME>") calls
