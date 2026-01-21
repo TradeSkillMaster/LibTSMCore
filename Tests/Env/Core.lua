@@ -29,10 +29,13 @@ function Env.Init(addonName, gameVersion)
 
 	-- Initialize game version globals
 	WOW_PROJECT_CLASSIC = 3
+	WOW_PROJECT_BURNING_CRUSADE_CLASSIC = 4
 	WOW_PROJECT_MISTS_CLASSIC = 5
 	WOW_PROJECT_MAINLINE = 1
 	if gameVersion == "VANILLA" then
 		WOW_PROJECT_ID = WOW_PROJECT_CLASSIC
+	elseif gameVersion == "BCC" then
+		WOW_PROJECT_ID = WOW_PROJECT_BURNING_CRUSADE_CLASSIC
 	elseif gameVersion == "MISTS" then
 		WOW_PROJECT_ID = WOW_PROJECT_MISTS_CLASSIC
 	elseif gameVersion == "RETAIL" then
