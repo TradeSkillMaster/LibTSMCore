@@ -28,14 +28,16 @@ end
 
 local function ParseFile(dirPath, fileName, readFileFunc, result)
 	local contents = readFileFunc(dirPath..fileName)
-	for tag, filePath in gmatch(contents, "<(%w+) file=\"([^\"]+)\"[ ]*/>") do
-		if tag == "Script" then
-			assert(filePath:match("%.lua$"))
-			tinsert(result, dirPath..filePath)
-		elseif tag == "Include" then
-			assert(filePath:match("%.xml$"))
-			local includeDirPath, includeFileName = SplitPath(filePath)
-			ParseFile(dirPath..includeDirPath, includeFileName, readFileFunc, result)
+	for extra, tag, filePath in gmatch(contents, "\n(.-)<(%w+) file=\"([^\"]+)\"[ ]*/>") do
+		if not strmatch(extra, "<!%-%-") then
+			if tag == "Script" then
+				assert(filePath:match("%.lua$"))
+				tinsert(result, dirPath..filePath)
+			elseif tag == "Include" then
+				assert(filePath:match("%.xml$"))
+				local includeDirPath, includeFileName = SplitPath(filePath)
+				ParseFile(dirPath..includeDirPath, includeFileName, readFileFunc, result)
+			end
 		end
 	end
 end

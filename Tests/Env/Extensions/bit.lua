@@ -13,3 +13,11 @@ function bit.band(a, b)
 	end
 	return result
 end
+
+function bit.lshift(value, places)
+	return value * 2 ^ places
+end
+
+function bit.rshift(value, places)
+	return math.floor(value / (2 ^ places))
+end
