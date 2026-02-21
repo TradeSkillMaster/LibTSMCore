@@ -79,8 +79,11 @@ function Loader.LoadAddonFile(path, addonName)
 	if ext == "lua" then
 		local code, moduleName = ReadLuaFile(path)
 		-- Best-effort attempt to patch code to collect all the locals (may fail if the code returns early)
+		-- Don't patch LibBonusId Data since it's a large data file
 		assert(not private.locals[moduleName] and not code:match("__CollectLocals"))
-		code = code:gsub("\nreturn .+\n*", "").."__CollectLocals(\""..moduleName.."\")"
+		if moduleName ~= "LibBonusId.Data" then
+			code = code:gsub("\nreturn .+\n*", "").."__CollectLocals(\""..moduleName.."\")"
+		end
 		ExecuteCode(code, path, addonName, private.addonTable)
 	elseif ext == "xml" then
 		for _, filePath in XMLFilePathIterator(path) do
