@@ -120,7 +120,9 @@ local function ProcessClassType(context, expression)
 			if parentClassName == "nil" then
 				parentClassName = nil
 			end
-			context:AddPrefixDiff(LibTSMClassPlugin.DefineClassHelper(className, parentClassName, context.text, context.lines))
+			local prevLineIndex = context.currentLine.index - 1
+			local genericParams = prevLineIndex >= 1 and context.lines[prevLineIndex]:match("^%-%-%-@generic (.+)$") or nil
+			context:AddPrefixDiff(LibTSMClassPlugin.DefineClassHelper(className, parentClassName, context.text, context.lines, genericParams))
 		end
 		-- Define class for <COMPONENT>:ExtendClass("<CLASS_NAME>") calls
 		local extendClassName = expression:match(componentName..":ExtendClass%(\"([^\"]+)\"%)")
