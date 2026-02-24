@@ -126,7 +126,10 @@ end
 ---@return T
 function COMPOENT_REFERENCE_METHODS:ExtendClass(name)
 	assert(not private.isExternalAccess)
-	local class =  private.componentByReference[self]:IncludeClassType(name)
+	private.isExternalAccess = true
+	local class = private.componentByReference[self]:IncludeClassType(name)
+	assert(private.isExternalAccess)
+	private.isExternalAccess = false
 	return class:__extend()
 end
 
@@ -508,7 +511,7 @@ function LibTSMCore.UnloadAll(maxTime)
 end
 
 ---Returns an iterator over all available modules.
----@return fun(): number, string, number, number @Iterator with fields: `index`, `componentName`, `modulePath`, `loadTime`, `unloadTime`
+---@return fun(): number, string, string, number, number @Iterator with fields: `index`, `componentName`, `modulePath`, `loadTime`, `unloadTime`
 ---@return nil
 ---@return number
 function LibTSMCore.ModuleInfoIterator()
