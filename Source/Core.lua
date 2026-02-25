@@ -92,13 +92,13 @@ local MODULE_MT = {
 -- ============================================================================
 
 ---@class LibTSMComponentReference
-local COMPOENT_REFERENCE_METHODS = {}
+local COMPONENT_REFERENCE_METHODS = {}
 
 ---Includes a module from the component.
 ---@generic T
 ---@param path `T` The path of the module
 ---@return T
-function COMPOENT_REFERENCE_METHODS:Include(path)
+function COMPONENT_REFERENCE_METHODS:Include(path)
 	assert(not private.isExternalAccess)
 	private.isExternalAccess = true
 	local module = private.componentByReference[self]:Include(path)
@@ -111,7 +111,7 @@ end
 ---@generic T
 ---@param name `T` The name of the class
 ---@return T
-function COMPOENT_REFERENCE_METHODS:IncludeClassType(name)
+function COMPONENT_REFERENCE_METHODS:IncludeClassType(name)
 	assert(not private.isExternalAccess)
 	private.isExternalAccess = true
 	local class =  private.componentByReference[self]:IncludeClassType(name)
@@ -124,17 +124,14 @@ end
 ---@generic T
 ---@param name `T` The name of the class
 ---@return T
-function COMPOENT_REFERENCE_METHODS:ExtendClass(name)
+function COMPONENT_REFERENCE_METHODS:ExtendClass(name)
 	assert(not private.isExternalAccess)
-	private.isExternalAccess = true
 	local class = private.componentByReference[self]:IncludeClassType(name)
-	assert(private.isExternalAccess)
-	private.isExternalAccess = false
 	return class:__extend()
 end
 
 local COMPONENT_REFERENCE_MT = {
-	__index = COMPOENT_REFERENCE_METHODS,
+	__index = COMPONENT_REFERENCE_METHODS,
 	__newindex = function() error("Cannot write to LibTSMComponentReference", 2) end,
 	__tostring = function(self) return tostring(private.componentByReference[self]) end,
 	__metatable = false,
@@ -471,7 +468,7 @@ end
 -- LibTSMCore Functions
 -- ============================================================================
 
----Creats a new component.
+---Creates a new component.
 ---@param name string The name of the component
 ---@return LibTSMComponent
 function LibTSMCore.NewComponent(name)
