@@ -1,0 +1,366 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Features &mdash; LibTSMCore  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/lua.css" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API" href="api.html" />
+    <link rel="prev" title="LibTSMCore" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            LibTSMCore
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Home</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Features</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#terminology">Terminology</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#component">Component</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module">Module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#class-types">Class Types</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#class-type-extensions">Class Type Extensions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#loading-unloading">Loading / Unloading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#internal-modules-classes">Internal Modules / Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#component-apis">Component APIs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#game-version">Game Version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#addon-version">Addon Version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#time">Time</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#misc-apis">Misc. APIs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#libtsmcore-moduleinfoiterator"><code class="docutils literal notranslate"><span class="pre">LibTSMCore.ModuleInfoIterator()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#onmoduleunloadlate"><code class="docutils literal notranslate"><span class="pre">:OnModuleUnloadLate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">LibTSMCore</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Features</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="features">
+<h1>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h1>
+<section id="terminology">
+<h2>Terminology<a class="headerlink" href="#terminology" title="Link to this heading"></a></h2>
+<p>There are a few terms used by LibTSMCore to refer to lua files / groups of files.</p>
+<section id="component">
+<h3>Component<a class="headerlink" href="#component" title="Link to this heading"></a></h3>
+<p>A component is a top-level grouping of related files which provide a common set of functionality.
+Components are typically used for high-level separation of things like application logic from
+business logic from ulility code. Components should have a very clear dependency hierarchy and
+are generally contained within a single top-level directory in an addon.</p>
+</section>
+<section id="module">
+<h3>Module<a class="headerlink" href="#module" title="Link to this heading"></a></h3>
+<p>A module is a single file within a component. Each module should contain a related set of APIs
+and functionality, and may depend on any other module within the same component or any component
+which the current component depends on. Modules which perform similar functions are generally
+grouped together into folders within the component.</p>
+</section>
+</section>
+<section id="class-types">
+<h2>Class Types<a class="headerlink" href="#class-types" title="Link to this heading"></a></h2>
+<p>LibTSMCore makes it easy to create modules which define a class via
+<a class="reference external" href="https://github.com/TradeSkillMaster/LibTSMClass">LibTSMClass</a>.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- Utils/Range.lua</span>
+<span class="kd">local</span> <span class="n">Utils</span> <span class="o">=</span> <span class="nb">select</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="p">...).</span><span class="n">Utils</span>
+<span class="kd">local</span> <span class="n">Range</span> <span class="o">=</span> <span class="n">Utils</span><span class="p">:</span><span class="n">DefineClassType</span><span class="p">(</span><span class="s2">&quot;Range&quot;</span><span class="p">)</span>
+
+<span class="kr">function</span> <span class="nc">Range</span><span class="p">:</span><span class="nf">__init</span><span class="p">(</span><span class="n">startValue</span><span class="p">,</span> <span class="n">endValue</span><span class="p">)</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">_start</span> <span class="o">=</span> <span class="n">startValue</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">_end</span> <span class="o">=</span> <span class="n">endValue</span>
+<span class="kr">end</span>
+
+<span class="kr">function</span> <span class="nc">Range</span><span class="p">:</span><span class="nf">IncludesValue</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="kr">return</span> <span class="n">value</span> <span class="o">&gt;=</span> <span class="n">self</span><span class="p">.</span><span class="n">_start</span> <span class="ow">and</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="n">self</span><span class="p">.</span><span class="n">_end</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- Utils/DebugPrint.lua</span>
+<span class="kd">local</span> <span class="n">Utils</span> <span class="o">=</span> <span class="nb">select</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="p">...).</span><span class="n">Utils</span>
+<span class="kd">local</span> <span class="n">DebugPrint</span> <span class="o">=</span> <span class="n">Utils</span><span class="p">:</span><span class="n">Init</span><span class="p">(</span><span class="s2">&quot;DebugPrint&quot;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">Range</span> <span class="o">=</span> <span class="n">Utils</span><span class="p">:</span><span class="n">IncludeClassType</span><span class="p">(</span><span class="s2">&quot;Range&quot;</span><span class="p">)</span>
+
+<span class="kd">local</span> <span class="n">VALID_LEVEL_RANGE</span> <span class="o">=</span> <span class="n">Range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span>
+
+<span class="kr">function</span> <span class="nc">DebugPrint</span><span class="p">.</span><span class="nf">PrintIsValidLevel</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
+    <span class="kr">if</span> <span class="n">VALID_LEVEL_RANGE</span><span class="p">:</span><span class="n">IncludesValues</span><span class="p">(</span><span class="n">level</span><span class="p">)</span> <span class="kr">then</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;%d is a valid level!&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">))</span>
+    <span class="kr">else</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;%d is not a valid level!&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">))</span>
+    <span class="kr">end</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+<section id="class-type-extensions">
+<h3>Class Type Extensions<a class="headerlink" href="#class-type-extensions" title="Link to this heading"></a></h3>
+<p>Class types can also be extended via LibTSMCore.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- Utils/DebugPrint.lua</span>
+<span class="kd">local</span> <span class="n">RangeExtension</span> <span class="o">=</span> <span class="n">Utils</span><span class="p">:</span><span class="n">ExtendClass</span><span class="p">(</span><span class="s2">&quot;Range&quot;</span><span class="p">)</span>
+
+<span class="kr">function</span> <span class="nc">RangeExtension</span><span class="p">:</span><span class="nf">PrintIsIncluded</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="kr">if</span> <span class="n">self</span><span class="p">:</span><span class="n">IncludesValues</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="kr">then</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;%d is included in range!&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+    <span class="kr">else</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;%d is not included in range!&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+    <span class="kr">end</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="loading-unloading">
+<h2>Loading / Unloading<a class="headerlink" href="#loading-unloading" title="Link to this heading"></a></h2>
+<p>Each module provides a set of default methods which can be used to run code when the module is
+loaded or unloaded. Note that these are not available for class types.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- Utils/Table.lua</span>
+<span class="kd">local</span> <span class="n">Utils</span> <span class="o">=</span> <span class="nb">select</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="p">...).</span><span class="n">Utils</span>
+<span class="kd">local</span> <span class="n">Table</span> <span class="o">=</span> <span class="n">Utils</span><span class="p">:</span><span class="n">Init</span><span class="p">(</span><span class="s2">&quot;Table&quot;</span><span class="p">)</span>
+
+<span class="n">Table</span><span class="p">:</span><span class="n">OnModuleLoad</span><span class="p">(</span><span class="kr">function</span><span class="p">()</span>
+    <span class="c1">-- This code runs once when the module is loaded.</span>
+<span class="kr">end</span><span class="p">)</span>
+
+<span class="n">Table</span><span class="p">:</span><span class="n">OnModuleUnload</span><span class="p">(</span><span class="kr">function</span><span class="p">()</span>
+    <span class="c1">-- This code runs once when the module is unloaded.</span>
+<span class="kr">end</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading"></a></h2>
+<p>Components can depend on other components, which then allows them to include modules from the
+components they depend on.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- Services/Core.lua</span>
+<span class="kd">local</span> <span class="n">ADDON_TABLE</span> <span class="o">=</span> <span class="nb">select</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="p">...)</span>
+<span class="n">ADDON_TABLE</span><span class="p">.</span><span class="n">Services</span> <span class="o">=</span> <span class="n">ADDON_TABLE</span><span class="p">.</span><span class="n">LibTSMCore</span><span class="p">.</span><span class="n">NewComponent</span><span class="p">(</span><span class="s2">&quot;Services&quot;</span><span class="p">)</span>
+    <span class="p">:</span><span class="n">AddDependency</span><span class="p">(</span><span class="s2">&quot;Utils&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- Services/SlashCommands.lua</span>
+<span class="kd">local</span> <span class="n">Services</span> <span class="o">=</span> <span class="nb">select</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="p">...).</span><span class="n">Services</span>
+<span class="kd">local</span> <span class="n">SlashCommands</span> <span class="o">=</span> <span class="n">Services</span><span class="p">:</span><span class="n">Init</span><span class="p">(</span><span class="s2">&quot;SlashCommands&quot;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">DebugPrint</span> <span class="o">=</span> <span class="n">Services</span><span class="p">:</span><span class="n">From</span><span class="p">(</span><span class="s2">&quot;Utils&quot;</span><span class="p">):</span><span class="n">Include</span><span class="p">(</span><span class="s2">&quot;DebugPrint&quot;</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">private</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">greeting</span> <span class="o">=</span> <span class="s2">&quot;Hello World!&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">SlashCommands</span><span class="p">:</span><span class="n">OnModuleLoad</span><span class="p">(</span><span class="kr">function</span><span class="p">()</span>
+    <span class="n">SLASH_HELLOWORLD1</span> <span class="o">=</span> <span class="s2">&quot;/helloworld&quot;</span>
+    <span class="n">SLASH_HELLOWORLD2</span> <span class="o">=</span> <span class="s2">&quot;/hw&quot;</span>
+    <span class="n">SlashCmdList</span><span class="p">.</span><span class="n">HELLOWORLD</span> <span class="o">=</span> <span class="n">private</span><span class="p">.</span><span class="n">SlashCommandHandler</span>
+<span class="kr">end</span><span class="p">)</span>
+
+<span class="c1">---Sets the greeting.</span>
+<span class="cm">---</span><span class="k k-Comment">@param</span><span class="cm"> greeting string</span>
+<span class="kr">function</span> <span class="nc">SlashCommands</span><span class="p">.</span><span class="nf">SetGreeting</span><span class="p">(</span><span class="n">greeting</span><span class="p">)</span>
+    <span class="n">private</span><span class="p">.</span><span class="n">greeting</span> <span class="o">=</span> <span class="n">greeting</span>
+<span class="kr">end</span>
+
+<span class="kr">function</span> <span class="nc">private</span><span class="p">.</span><span class="nf">SlashCommandHandler</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">private</span><span class="p">.</span><span class="n">greeting</span><span class="p">)</span>
+    <span class="kd">local</span> <span class="n">level</span> <span class="o">=</span> <span class="n">UnitLevel</span><span class="p">(</span><span class="s2">&quot;player&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;You are level %d.&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">))</span>
+    <span class="n">DebugPrint</span><span class="p">.</span><span class="n">PrintIsValidLevel</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+</section>
+<section id="internal-modules-classes">
+<h2>Internal Modules / Classes<a class="headerlink" href="#internal-modules-classes" title="Link to this heading"></a></h2>
+<p>Modules and classes within a component can be defined as internal via the <code class="docutils literal notranslate"><span class="pre">:InitInternal()</span></code> and
+<code class="docutils literal notranslate"><span class="pre">:DefineInternalClassType()</span></code> APis respectively. This ensures they cannot be included outside of the
+current component, and is useful to prevent leaking internal implementation APIs to other
+components.</p>
+</section>
+<section id="component-apis">
+<h2>Component APIs<a class="headerlink" href="#component-apis" title="Link to this heading"></a></h2>
+<p>Components provide a set of APIs which may be called within the modules to provide some baseline
+functionality.</p>
+<section id="game-version">
+<h3>Game Version<a class="headerlink" href="#game-version" title="Link to this heading"></a></h3>
+<p>A set of APIs is provided by every component for accessing the active game version.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- Utils/DebugPrint.lua</span>
+<span class="kd">local</span> <span class="n">Utils</span> <span class="o">=</span> <span class="nb">select</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="p">...).</span><span class="n">Utils</span>
+<span class="kd">local</span> <span class="n">DebugPrint</span> <span class="o">=</span> <span class="n">Utils</span><span class="p">:</span><span class="n">Init</span><span class="p">(</span><span class="s2">&quot;DebugPrint&quot;</span><span class="p">)</span>
+
+<span class="kr">function</span> <span class="nc">DebugPrint</span><span class="p">.</span><span class="nf">PrintGameVersion</span><span class="p">()</span>
+    <span class="kr">if</span> <span class="n">Utils</span><span class="p">.</span><span class="n">IsRetail</span><span class="p">()</span> <span class="kr">then</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Game version is retail!&quot;</span><span class="p">)</span>
+    <span class="kr">elseif</span> <span class="n">Utils</span><span class="p">.</span><span class="n">IsMistsClassic</span><span class="p">()</span> <span class="kr">then</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Game version is mists class!&quot;</span><span class="p">)</span>
+    <span class="kr">elseif</span> <span class="n">Utils</span><span class="p">.</span><span class="n">IsVanillaClassic</span><span class="p">()</span> <span class="kr">then</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Game version is vanilla classic!&quot;</span><span class="p">)</span>
+    <span class="kr">else</span>
+        <span class="nb">error</span><span class="p">(</span><span class="s2">&quot;Game version is unknown&quot;</span><span class="p">)</span>
+    <span class="kr">end</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+</section>
+<section id="addon-version">
+<h3>Addon Version<a class="headerlink" href="#addon-version" title="Link to this heading"></a></h3>
+<p>A set of APIs is provided by every component for accessing the current addon version. LibTSMCore
+assumes that, for development, the version string is defined in the .toc file as ending in
+<code class="docutils literal notranslate"><span class="pre">&quot;project-version&#64;&quot;</span></code>, which matches the conventions used by both the Curseforge and
+<a class="reference external" href="https://github.com/BigWigsMods/packager">BigWigs</a> packagers. For test environments, LibTSMCore
+assumes that C_AddOns.GetAddOnMetadata(ADODN_NAME, “Version”) is mocked to return <code class="docutils literal notranslate"><span class="pre">&quot;v0.0.0&quot;</span></code>.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- Utils/DebugPrint.lua</span>
+<span class="kd">local</span> <span class="n">Utils</span> <span class="o">=</span> <span class="nb">select</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="p">...).</span><span class="n">Utils</span>
+<span class="kd">local</span> <span class="n">DebugPrint</span> <span class="o">=</span> <span class="n">Utils</span><span class="p">:</span><span class="n">Init</span><span class="p">(</span><span class="s2">&quot;DebugPrint&quot;</span><span class="p">)</span>
+
+<span class="kr">function</span> <span class="nc">DebugPrint</span><span class="p">.</span><span class="nf">PrintAddonVersion</span><span class="p">()</span>
+    <span class="kr">if</span> <span class="n">Utils</span><span class="p">.</span><span class="n">IsTestVersion</span><span class="p">()</span> <span class="kr">then</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Running in a test environment&quot;</span><span class="p">)</span>
+    <span class="kr">elseif</span> <span class="n">Utils</span><span class="p">.</span><span class="n">IsDevVersion</span><span class="p">()</span> <span class="kr">then</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Running in a development environment&quot;</span><span class="p">)</span>
+    <span class="kr">else</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Addon version is: &quot;</span><span class="o">..</span><span class="n">Utils</span><span class="p">.</span><span class="n">GetVersionStr</span><span class="p">())</span>
+    <span class="kr">end</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+</section>
+<section id="time">
+<h3>Time<a class="headerlink" href="#time" title="Link to this heading"></a></h3>
+<p>Since having a source of time is a fairly common requirement, LibTSMCore provides a mechanism for
+getting the current time based on a registered time function. This allows for the encompassing
+addon to provides its own source-of-truth time based on its own requirements of precision and
+accuracy. This is also a purely-optional dependency, with <code class="docutils literal notranslate"><span class="pre">GetTime()</span></code> simply returning <code class="docutils literal notranslate"><span class="pre">0</span></code> if no
+time function is registered.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- TimeInit.lua</span>
+<span class="kd">local</span> <span class="n">LibTSMCore</span> <span class="o">=</span> <span class="nb">select</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="p">...).</span><span class="n">LibTSMCore</span>
+
+<span class="n">LibTSMCore</span><span class="p">.</span><span class="n">SetTimeFunction</span><span class="p">(</span><span class="kr">function</span><span class="p">()</span>
+    <span class="kr">return</span> <span class="n">time</span><span class="p">()</span>
+<span class="kr">end</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- Utils/DebugPrint.lua</span>
+<span class="kd">local</span> <span class="n">Utils</span> <span class="o">=</span> <span class="nb">select</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="p">...).</span><span class="n">Utils</span>
+<span class="kd">local</span> <span class="n">DebugPrint</span> <span class="o">=</span> <span class="n">Utils</span><span class="p">:</span><span class="n">Init</span><span class="p">(</span><span class="s2">&quot;DebugPrint&quot;</span><span class="p">)</span>
+
+<span class="kr">function</span> <span class="nc">DebugPrint</span><span class="p">.</span><span class="nf">PrintTime</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Current time is: &quot;</span><span class="o">..</span><span class="n">Utils</span><span class="p">.</span><span class="n">GetTime</span><span class="p">())</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="misc-apis">
+<h2>Misc. APIs<a class="headerlink" href="#misc-apis" title="Link to this heading"></a></h2>
+<section id="libtsmcore-moduleinfoiterator">
+<h3><code class="docutils literal notranslate"><span class="pre">LibTSMCore.ModuleInfoIterator()</span></code><a class="headerlink" href="#libtsmcore-moduleinfoiterator" title="Link to this heading"></a></h3>
+<p>This API is provided to get metadata about all registered modules for debugging purposes.</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kr">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">componentName</span><span class="p">,</span> <span class="n">modulePath</span><span class="p">,</span> <span class="n">loadTime</span><span class="p">,</span> <span class="n">unloadTime</span> <span class="kr">in</span> <span class="n">LibTSMCore</span><span class="p">.</span><span class="n">ModuleInfoIterator</span><span class="p">()</span> <span class="kr">do</span>
+    <span class="kr">if</span> <span class="n">loadTime</span> <span class="kr">then</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;%s-&gt;%s loaded in %d&quot;</span><span class="p">,</span> <span class="n">componentName</span><span class="p">,</span> <span class="n">modulePath</span><span class="p">,</span> <span class="n">loadTime</span><span class="p">))</span>
+    <span class="kr">end</span>
+    <span class="kr">if</span> <span class="n">unloadTime</span> <span class="kr">then</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;%s-&gt;%s unloaded in %d&quot;</span><span class="p">,</span> <span class="n">componentName</span><span class="p">,</span> <span class="n">modulePath</span><span class="p">,</span> <span class="n">unloadTime</span><span class="p">))</span>
+    <span class="kr">end</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+</section>
+<section id="onmoduleunloadlate">
+<h3><code class="docutils literal notranslate"><span class="pre">:OnModuleUnloadLate()</span></code><a class="headerlink" href="#onmoduleunloadlate" title="Link to this heading"></a></h3>
+<p>This method is provided on modules in addition to <code class="docutils literal notranslate"><span class="pre">:OnModuleUnload()</span></code> in order to defer unloading
+of a module until later in the unloading process. This allows for a 2-stage unloading process if
+other modules need to be unloaded first. Note that a single module <strong>cannot use both</strong>
+<code class="docutils literal notranslate"><span class="pre">:OnModuleUnload()</span></code> and <code class="docutils literal notranslate"><span class="pre">:OnModuleUnloadLate()</span></code>.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="LibTSMCore" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api.html" class="btn btn-neutral float-right" title="API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, TradeSkillMaster LLC.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
