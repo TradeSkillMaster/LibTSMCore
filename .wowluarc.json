@@ -1,0 +1,8 @@
+{
+    "ignore": [
+        ".vscode/",
+        "Docs/",
+        "LuaLSPlugin/",
+        "Tests/"
+    ]
+}
