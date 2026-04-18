@@ -439,6 +439,7 @@ function LibTSMComponent:_UnloadAll(maxTime)
 	while #self._lateUnload > 0 and self.GetTime() < maxTime do
 		local context = tremove(self._lateUnload) ---@type LibTSMModuleContext
 		local startTime = self.GetTime()
+		assert(context.moduleUnloadFunc)
 		context.moduleUnloadFunc()
 		if maxTime ~= math.huge then
 			context.moduleUnloadTime = self.GetTime() - startTime
