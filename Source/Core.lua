@@ -483,7 +483,7 @@ end
 ---Creates a new component.
 ---@defclass T
 ---@generic T: LibTSMComponent
----@param name string The name of the component
+---@param name `T` The name of the component
 ---@return T
 function LibTSMCore.NewComponent(name)
 	assert(type(name) == "string" and not private.components[name])

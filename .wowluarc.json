@@ -9,5 +9,6 @@
         "Docs/",
         "LuaLSPlugin/",
         "Tests/"
-    ]
+    ],
+    "framexml": false
 }
