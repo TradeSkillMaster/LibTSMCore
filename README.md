@@ -82,14 +82,6 @@ function DebugPrint.TableKeysOrdered(tbl)
 end
 ```
 
-## LuaLS Plugin
-
-A [plugin](LuaLSPlugin/LibTSMCoreLuaLSPlugin.lua) for
-[LuaLS](https://github.com/LuaLS/lua-language-server) is provided to allow for better language
-server support. The plugin exposes `.GetContext(uri, text)` and `.ProcessContext(context)`
-functions which can be called in the `OnSetText(uri, text)` function in your own plugin as well as
-a few other useful functions for more custom integrations.
-
 ## License and Contributions
 
 LibTSMCore is licensed under the MIT license. See LICENSE.txt for more information. If you would

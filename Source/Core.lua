@@ -143,7 +143,6 @@ local COMPONENT_REFERENCE_MT = {
 -- LibTSMComponent Class - Meta Methods
 -- ============================================================================
 
----@class LibTSMComponent
 local LibTSMComponent = LibTSMClass.DefineClass("LibTSMComponent")
 
 ---@class LibTSMModuleContext
@@ -232,6 +231,7 @@ end
 -- ============================================================================
 
 ---Creates a new module and makes it available to other components.
+---@defclass T
 ---@generic T: LibTSMModule
 ---@param path `T` The path of the module
 ---@return T
@@ -240,6 +240,7 @@ function LibTSMComponent:Init(path)
 end
 
 ---Creates a new module which is only available internally within the component.
+---@defclass T
 ---@generic T: LibTSMModule
 ---@param path `T` The path of the module
 ---@return T
@@ -248,9 +249,11 @@ function LibTSMComponent:InitInternal(path)
 end
 
 ---Creates a new class type and makes it available to other components.
----@generic T: Class
+---@defclass T : P
+---@generic T: Class<P>
+---@generic P: Class
 ---@param name `T` The name of the class
----@param parentClass? Class The parent class
+---@param parentClass? P The parent class
 ---@param ... ClassProperties Properties to define the class with
 ---@return T
 function LibTSMComponent:DefineClassType(name, parentClass, ...)
@@ -258,9 +261,11 @@ function LibTSMComponent:DefineClassType(name, parentClass, ...)
 end
 
 ---Creates a new class type which is only available internally within the component.
----@generic T: Class
+---@defclass T : P
+---@generic T: Class<P>
+---@generic P: Class
 ---@param name `T` The name of the class
----@param parentClass? Class The parent class
+---@param parentClass? P The parent class
 ---@param ... ClassProperties Properties to define the class with
 ---@return T
 function LibTSMComponent:DefineInternalClassType(name, parentClass, ...)
@@ -307,7 +312,7 @@ end
 
 ---Adds a component as a dependency of the current component.
 ---@param name string The name of the component
----@return LibTSMComponent
+---@return self
 function LibTSMComponent:AddDependency(name)
 	assert(not next(self._moduleContext) and not next(self._classTypes))
 	assert(type(name) == "string" and not self._dependencies[name])
@@ -323,6 +328,11 @@ end
 -- LibTSMComponent Class - Private Methods
 -- ============================================================================
 
+---@defclass T
+---@generic T: Class
+---@param path `T`
+---@param isInternal boolean
+---@return T
 function LibTSMComponent.__private:_InitHelper(path, isInternal)
 	assert(type(path) == "string")
 	if self._moduleContext[path] then
@@ -348,11 +358,12 @@ function LibTSMComponent.__private:_InitHelper(path, isInternal)
 	return moduleObj
 end
 
----Creates a new class type.
----@generic T: Class
----@param name `T` The name of the class
----@param parentClass? Class The parent class
----@param ... ClassProperties Properties to define the class with
+---@defclass T : P
+---@generic T: Class<P>
+---@generic P: Class
+---@param name `T`
+---@param parentClass? P
+---@param ... ClassProperties
 ---@return T
 function LibTSMComponent.__private:_DefineClassTypeHelper(isInternal, name, parentClass, ...)
 	assert(type(name) == "string")
@@ -428,6 +439,7 @@ function LibTSMComponent:_UnloadAll(maxTime)
 	while #self._lateUnload > 0 and self.GetTime() < maxTime do
 		local context = tremove(self._lateUnload) ---@type LibTSMModuleContext
 		local startTime = self.GetTime()
+		assert(context.moduleUnloadFunc)
 		context.moduleUnloadFunc()
 		if maxTime ~= math.huge then
 			context.moduleUnloadTime = self.GetTime() - startTime
@@ -469,8 +481,10 @@ end
 -- ============================================================================
 
 ---Creates a new component.
----@param name string The name of the component
----@return LibTSMComponent
+---@defclass T
+---@generic T: LibTSMComponent
+---@param name `T` The name of the component
+---@return T
 function LibTSMCore.NewComponent(name)
 	assert(type(name) == "string" and not private.components[name])
 	local component = LibTSMComponent(name)
