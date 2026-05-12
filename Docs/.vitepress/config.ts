@@ -1,6 +1,7 @@
 import { defineConfig } from "vitepress"
 
 export default defineConfig({
+	base: "/LibTSMCore/",
 	title: "LibTSMCore",
 	description: "Component and module framework for World of Warcraft addons",
 	themeConfig: {
