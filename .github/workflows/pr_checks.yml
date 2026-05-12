@@ -36,7 +36,9 @@ jobs:
           ./wowlua_ls-x86_64-unknown-linux-gnu check .
 
       - name: Unit Tests
-        run: lua Tests/Core.lua -o junit -n test-results.xml
+        run: |
+          ln -s . LibTSMCore
+          lua Tests/Core.lua -o junit -n test-results.xml
 
       - name: Test Report
         uses: dorny/test-reporter@v3
