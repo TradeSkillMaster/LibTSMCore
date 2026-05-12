@@ -5,9 +5,7 @@
         ]
     },
     "ignore": [
-        ".vscode/",
         "Docs/",
-        "LuaLSPlugin/",
         "Tests/"
     ],
     "framexml": false
