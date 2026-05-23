@@ -36,6 +36,7 @@ do
 	assert(GAME_VERSION, "Invalid game version: "..tostring(WOW_PROJECT_ID))
 
 	local versionRaw = C_AddOns.GetAddOnMetadata(ADDON_NAME, "Version")
+	assert(versionRaw)
 	local isDevVersion = strmatch(versionRaw, "project%-version@$") and true or false
 	private.versionStr = isDevVersion and "Dev" or versionRaw
 	private.versionIsDev = isDevVersion
