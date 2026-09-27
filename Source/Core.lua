@@ -196,10 +196,10 @@ function LibTSMComponent.__static.IsMistsClassic()
 	return GAME_VERSION == "MISTS"
 end
 
----Returns whether or not we're running within the retail version of the game (including Forever, which uses the retail client).
+---Returns whether or not we're running within the retail version of the game.
 ---@return boolean
 function LibTSMComponent.__static.IsRetail()
-	return GAME_VERSION == "RETAIL" or GAME_VERSION == "FOREVER"
+	return GAME_VERSION == "RETAIL"
 end
 
 ---Returns whether or not we're running within the Forever version of the game.
