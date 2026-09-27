@@ -45,6 +45,9 @@ function Env.Init(addonName, gameVersion)
 	end
 
 	-- Mock functions required by LibTSMCore
+	GetBuildInfo = function()
+		return "12.0.5", "67823", "May 26 2026", 120005
+	end
 	C_AddOns = {
 		GetAddOnMetadata = function(name, key)
 			key = key:lower()

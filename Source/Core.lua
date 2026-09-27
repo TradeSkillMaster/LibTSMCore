@@ -30,6 +30,8 @@ do
 		GAME_VERSION = "BCC"
 	elseif WOW_PROJECT_ID == WOW_PROJECT_MISTS_CLASSIC then
 		GAME_VERSION = "MISTS"
+	elseif WOW_PROJECT_ID == WOW_PROJECT_MAINLINE and select(4, GetBuildInfo()) < 20000 then
+		GAME_VERSION = "FOREVER"
 	elseif WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
 		GAME_VERSION = "RETAIL"
 	end
@@ -194,10 +196,16 @@ function LibTSMComponent.__static.IsMistsClassic()
 	return GAME_VERSION == "MISTS"
 end
 
----Returns whether or not we're running within the retail version of the game.
+---Returns whether or not we're running within the retail version of the game (including Forever, which uses the retail client).
 ---@return boolean
 function LibTSMComponent.__static.IsRetail()
-	return GAME_VERSION == "RETAIL"
+	return GAME_VERSION == "RETAIL" or GAME_VERSION == "FOREVER"
+end
+
+---Returns whether or not we're running within the Forever version of the game.
+---@return boolean
+function LibTSMComponent.__static.IsForever()
+	return GAME_VERSION == "FOREVER"
 end
 
 ---Gets the current time value (or 0 if no function is registered).
