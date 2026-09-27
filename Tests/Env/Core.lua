@@ -7,7 +7,7 @@ local private = {
 
 ---Initializes the environment for testing.
 ---@param addonName string The addon name (first argument passed to all addon files)
----@param gameVersion "VANILLA"|"MISTS"|"RETAIL" The game version to test for
+---@param gameVersion "VANILLA"|"MISTS"|"RETAIL"|"FOREVER" The game version to test for
 function Env.Init(addonName, gameVersion)
 	-- Load luaunit globally
 	EXPORT_ASSERT_TO_GLOBALS = true
@@ -38,13 +38,19 @@ function Env.Init(addonName, gameVersion)
 		WOW_PROJECT_ID = WOW_PROJECT_BURNING_CRUSADE_CLASSIC
 	elseif gameVersion == "MISTS" then
 		WOW_PROJECT_ID = WOW_PROJECT_MISTS_CLASSIC
-	elseif gameVersion == "RETAIL" then
+	elseif gameVersion == "RETAIL" or gameVersion == "FOREVER" then
 		WOW_PROJECT_ID = WOW_PROJECT_MAINLINE
 	else
 		error("Invalid game version: "..tostring(gameVersion))
 	end
 
 	-- Mock functions required by LibTSMCore
+	GetBuildInfo = function()
+		if gameVersion == "FOREVER" then
+			return "1.60.1", "69913", "Sep 17 2026", 16001
+		end
+		return "12.0.5", "67823", "May 26 2026", 120005
+	end
 	C_AddOns = {
 		GetAddOnMetadata = function(name, key)
 			key = key:lower()

@@ -14,6 +14,7 @@ This library has as few dependencies as possible other than than WoW environment
 following WoW globals and functions:
 
 * `WOW_PROJECT_ID` (and associated globals) to determine the game version
+* `GetBuildInfo` to distinguish Forever from retail (both report `WOW_PROJECT_MAINLINE`)
 * `C_AddOns.GetAddOnMetadata` to determine the version of the including addon
 
 ## Installation
