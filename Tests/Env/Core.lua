@@ -32,25 +32,22 @@ function Env.Init(addonName, gameVersion)
 	WOW_PROJECT_BURNING_CRUSADE_CLASSIC = 4
 	WOW_PROJECT_MISTS_CLASSIC = 5
 	WOW_PROJECT_MAINLINE = 1
+	WOW_PROJECT_CAMELOT = 18
 	if gameVersion == "VANILLA" then
 		WOW_PROJECT_ID = WOW_PROJECT_CLASSIC
 	elseif gameVersion == "BCC" then
 		WOW_PROJECT_ID = WOW_PROJECT_BURNING_CRUSADE_CLASSIC
 	elseif gameVersion == "MISTS" then
 		WOW_PROJECT_ID = WOW_PROJECT_MISTS_CLASSIC
-	elseif gameVersion == "RETAIL" or gameVersion == "FOREVER" then
+	elseif gameVersion == "RETAIL" then
 		WOW_PROJECT_ID = WOW_PROJECT_MAINLINE
+	elseif gameVersion == "FOREVER" then
+		WOW_PROJECT_ID = WOW_PROJECT_CAMELOT
 	else
 		error("Invalid game version: "..tostring(gameVersion))
 	end
 
 	-- Mock functions required by LibTSMCore
-	GetBuildInfo = function()
-		if gameVersion == "FOREVER" then
-			return "1.60.1", "69913", "Sep 17 2026", 16001
-		end
-		return "12.0.5", "67823", "May 26 2026", 120005
-	end
 	C_AddOns = {
 		GetAddOnMetadata = function(name, key)
 			key = key:lower()
