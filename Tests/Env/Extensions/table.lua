@@ -37,3 +37,24 @@ table.removemulti = function(t, pos, count)
 		tremove(t, pos)
 	end
 end
+table.getcountinfo = function(t)
+	local numEntries, numPositiveIntegerKeys, maxPositiveIntegerKey = 0, 0, 0
+	for k in pairs(t) do
+		numEntries = numEntries + 1
+		if type(k) == "number" and k > 0 and math.floor(k) == k then
+			numPositiveIntegerKeys = numPositiveIntegerKeys + 1
+			maxPositiveIntegerKey = math.max(maxPositiveIntegerKey, k)
+		end
+	end
+	return numEntries, numPositiveIntegerKeys, maxPositiveIntegerKey
+end
+table.removevalue = function(t, value)
+	local numRemoved = 0
+	for i = #t, 1, -1 do
+		if t[i] == value then
+			tremove(t, i)
+			numRemoved = numRemoved + 1
+		end
+	end
+	return numRemoved
+end
